@@ -28,7 +28,7 @@ jobs:
 
       - name: Compilar código Go
         run: |
-          GOOS=linux GOARCH=amd64 go build -o main main.go
+          GOOS=linux GOARCH=amd64 go build -o main cmd/main.go
           zip function.zip main
 
       - name: Fazer deploy da função Lambda
