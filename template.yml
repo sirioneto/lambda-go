@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Exemplo de função Lambda com AWS SAM
+
+Resources:
+  MyLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main
+      Runtime: go1.x
+      CodeUri: ./cmd
+      MemorySize: 128
+      Timeout: 3
+      Events:
+        ApiGateway:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: get
+
+Outputs:
+  MyApiUrl:
+    Description: "URL da API Gateway"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/health"
