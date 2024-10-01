@@ -2,9 +2,9 @@ hello:
 	echo "Hello"
 
 build:
-	go build -o main main.go
+	go build -o main cmd/main.go
 
 run:
-	go run main.go
+	go run cmd/main.go
 
 all: hello build
