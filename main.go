@@ -8,23 +8,33 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func main() {
-	lambda.Start(handler)
-}
-
+// HealthCheckResponseBody estrutura de resposta da função Lambda
 type HealthCheckResponseBody struct {
-	Timestamp time.Duration
+	Timestamp int64  `json:"timestamp"`
 	Message   string `json:"message"`
 }
 
+// handler função principal da Lambda
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	res, _ := json.Marshal(&HealthCheckResponseBody{
-		Timestamp: time.Nanosecond,
-		Message:   "Lambda OK!",
-	})
+	response := HealthCheckResponseBody{
+		Timestamp: time.Now().Unix(),
+		Message:   "Lambda está funcionando corretamente!",
+	}
+
+	body, err := json.Marshal(response)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       "Erro ao gerar a resposta",
+		}, err
+	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(res),
+		Body:       string(body),
 	}, nil
+}
+
+func main() {
+	lambda.Start(handler)
 }
