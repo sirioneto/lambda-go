@@ -23,6 +23,9 @@ jobs:
       - name: Install Dependencies
         run: go mod download
 
+      - name: Tidy Go Modules
+        run: go mod tidy
+
   code_analysis:
     runs-on: ubuntu-latest
     needs: common
@@ -81,12 +84,13 @@ jobs:
           branch: ${{ github.head_ref }}
 
       - name: Upload Coverage Report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage.out
 
   deploy:
+    needs: [common, code_analysis, test]
     name: Deploy para AWS Lambda
     runs-on: ubuntu-latest
 
